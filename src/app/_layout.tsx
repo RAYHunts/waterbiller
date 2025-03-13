@@ -4,27 +4,18 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import "react-native-reanimated";
-import * as Sentry from "@sentry/react-native";
+import 'react-native-reanimated';
 
-import { useColorScheme } from "react-native";
-import { supabase } from "@/utils/supabase";
-import useAuthStore from "@/store/authStore";
+import useAuthStore from '@/store/authStore';
+import { useColorScheme } from 'react-native';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-Sentry.init({
-  dsn: "https://79c82a2fa150d61678e68cf0cd0092f4@o4508782305607680.ingest.de.sentry.io/4508890551156816",
-
-  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // spotlight: __DEV__,
-});
-
 const RootLayout = () => {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("~/assets/fonts/SpaceMono-Regular.ttf"),
+    SpaceMono: require('~/assets/fonts/SpaceMono-Regular.ttf'),
   });
   const { refreshSession } = useAuthStore();
 
@@ -43,7 +34,7 @@ const RootLayout = () => {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(main)" options={{ headerShown: false }} />
         <Stack.Screen name="auth" options={{ headerShown: false }} />
@@ -54,4 +45,4 @@ const RootLayout = () => {
   );
 };
 
-export default Sentry.wrap(RootLayout);
+export default RootLayout;
