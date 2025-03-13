@@ -7,12 +7,9 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import * as Sentry from "@sentry/react-native";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "react-native";
 import { supabase } from "@/utils/supabase";
 import useAuthStore from "@/store/authStore";
-
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useReactQueryDevTools } from "@dev-plugins/react-query";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -23,17 +20,6 @@ Sentry.init({
   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
   // spotlight: __DEV__,
 });
-
-const App = () => {
-  const queryClient = new QueryClient({});
-
-  useReactQueryDevTools(queryClient);
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RootLayout />
-    </QueryClientProvider>
-  );
-};
 
 const RootLayout = () => {
   const colorScheme = useColorScheme();
@@ -68,4 +54,4 @@ const RootLayout = () => {
   );
 };
 
-export default Sentry.wrap(App);
+export default Sentry.wrap(RootLayout);

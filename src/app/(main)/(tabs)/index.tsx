@@ -1,13 +1,12 @@
-import { Image, StyleSheet, Platform, View, Button, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useAuthStore from "@/store/authStore";
 
 export default function HomeScreen() {
-  const { logout, session } = useAuthStore();
+  const { session } = useAuthStore();
   return (
     <SafeAreaView>
       <ThemedView>
