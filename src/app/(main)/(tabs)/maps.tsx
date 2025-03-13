@@ -74,7 +74,6 @@ function Map() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setUserLocation([location.coords.longitude, location.coords.latitude]);
       setLocation(location);
     }
 
@@ -94,13 +93,8 @@ function Map() {
         style={styles.map}
         logoEnabled={false}
         attributionPosition={{ bottom: 8, right: 8 }}
-        mapStyle={MapTiles}>
-        <Camera
-          ref={cameraRef}
-          defaultSettings={{ centerCoordinate: gununggeni, zoomLevel: 25 }}
-          animationMode="flyTo"
-          followUserLocation
-        />
+        mapStyle={MapTiles}
+        onPress={() => setSelectedFeature(undefined)}>
         {userLocation && <UserLocation />}
 
         <ShapeSource
