@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import {
   Camera,
   CameraRef,
@@ -7,15 +8,12 @@ import {
   SymbolLayer,
   UserLocation,
 } from '@maplibre/maplibre-react-native';
+import { layers, namedFlavor } from '@protomaps/basemaps';
+import * as Location from 'expo-location';
+import { openBrowserAsync } from 'expo-web-browser';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-// import MapView  from "react-native-maps";
-import { MapTiles } from '@/constants/MapStyle';
-import { Ionicons } from '@expo/vector-icons';
-import * as Location from 'expo-location';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { openBrowserAsync } from 'expo-web-browser';
 
 const FEATURE_COLLECTION: GeoJSON.FeatureCollection<GeoJSON.Point, { name: string }> = {
   type: 'FeatureCollection',
@@ -56,11 +54,8 @@ const FEATURE_COLLECTION: GeoJSON.FeatureCollection<GeoJSON.Point, { name: strin
   ],
 };
 
-const gununggeni = [-73.99155, 40.73581];
-
 function Map() {
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
-  const [userLocation, setUserLocation] = useState<number[] | null>(null);
   const cameraRef = useRef<CameraRef>(null);
   const [selectedFeature, setSelectedFeature] =
     useState<GeoJSON.Feature<GeoJSON.Point, { name: string }>>();
@@ -80,9 +75,9 @@ function Map() {
     getCurrentLocation();
   }, []);
 
-  const goToUserLocation = () => {
-    console.log(location);
+  const goToUserLocation = async () => {
     if (location && cameraRef?.current) {
+      cameraRef?.current.zoomTo(25);
       cameraRef?.current.flyTo([location.coords.longitude, location.coords.latitude], 1500);
     }
   };
@@ -93,9 +88,30 @@ function Map() {
         style={styles.map}
         logoEnabled={false}
         attributionPosition={{ bottom: 8, right: 8 }}
-        mapStyle={MapTiles}
+        mapStyle={{
+          version: 8,
+          glyphs: 'https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf',
+          sprite: 'https://protomaps.github.io/basemaps-assets/sprites/v4/light',
+          sources: {
+            protomaps: {
+              type: 'vector',
+              url: 'pmtiles://https://odznrimbyjtwvvuhwgty.supabase.co/storage/v1/object/public/public_maps//probolinggo.pmtiles',
+              attribution:
+                '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+            },
+          },
+          layers: layers('protomaps', namedFlavor('light'), { lang: 'id' }),
+        }}
         onPress={() => setSelectedFeature(undefined)}>
-        {userLocation && <UserLocation />}
+        {location && <UserLocation />}
+
+        <Camera
+          ref={cameraRef}
+          defaultSettings={{
+            centerCoordinate: [113.293444, -7.871689],
+            zoomLevel: 25,
+          }}
+        />
 
         <ShapeSource
           id="shape-source"
@@ -124,7 +140,6 @@ function Map() {
             coordinate={selectedFeature.geometry.coordinates}
             anchor={{ x: 0.5, y: 2 }}>
             <View style={styles.annotationContainer}>
-              {/* <Text style={styles.annotationText}>{selectedFeature.properties.name}</Text> */}
               <TouchableOpacity
                 onPress={() =>
                   openBrowserAsync(

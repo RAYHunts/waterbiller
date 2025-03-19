@@ -1,65 +1,76 @@
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import useAuthStore from "@/store/authStore";
-import React from "react";
-import { Button, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from "expo-image";
-import { useThemeStore } from "@/store/themeStore";
-import { router } from "expo-router";
-import { Feather, FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { useThemeStore } from '@/store/themeStore';
+import { FontAwesome6 } from '@expo/vector-icons';
+import React from 'react';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Settings = () => {
-  const backgroundColor = useThemeColor({}, "background");
-  const { session, logout } = useAuthStore();
-  const textColor = useThemeColor({}, "text");
-  const { setPreferredTheme } = useThemeStore();
+const SettingsScreen = () => {
+  const colors = {
+    background: '#f5f5f5',
+    text: '#333333',
+  };
+
+  const { setPreferredTheme, preferredTheme } = useThemeStore();
+
   return (
-    <SafeAreaView>
-      <ThemedView>
-        <View style={styles.container}>
-          <View style={{ display: "flex", flexDirection: "row", gap: 16, alignItems: "center", justifyContent: "flex-start" }}>
-            <Image source={"https://picsum.photos/100"} style={styles.avatar} />
-            <View>
-              <ThemedText>{session?.user?.user_metadata.first_name + " " + session?.user.user_metadata.last_name}</ThemedText>
-              <ThemedText>{session?.user?.email}</ThemedText>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ThemedView style={[styles.container]}>
+        <View style={styles.userInfoSection}>
+          <Image source={{ uri: 'https://picsum.photos/200' }} style={styles.userImage} />
+          <ThemedText style={[styles.userName]}>John Doe</ThemedText>
+          <ThemedText style={[styles.userEmail]}>john.doe@example.com</ThemedText>
+        </View>
+
+        <View style={styles.menuWrapper}>
+          <TouchableOpacity onPress={() => {}}>
+            <View style={styles.menuItem}>
+              <ThemedText style={[styles.menuItemText]}>Profile</ThemedText>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => {}}>
+            <View style={styles.menuItem}>
+              <ThemedText style={[styles.menuItemText]}>Meter Device</ThemedText>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => {}}>
+            <View style={styles.menuItem}>
+              <ThemedText style={[styles.menuItemText]}>About App</ThemedText>
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.menuItem}>
+            <ThemedText style={[styles.menuItemText]}>Theme</ThemedText>
+            <View style={styles.buttonGroup}>
+              <TouchableOpacity
+                style={[styles.themeButton, preferredTheme === 'system' && styles.activeButton]}
+                onPress={() => setPreferredTheme('system')}>
+                <FontAwesome6 size={12} name="mobile-screen" color={colors.text} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.themeButton, preferredTheme === 'light' && styles.activeButton]}
+                onPress={() => setPreferredTheme('light')}>
+                <FontAwesome6 size={12} name="sun" color={colors.text} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.themeButton, preferredTheme === 'dark' && styles.activeButton]}
+                onPress={() => setPreferredTheme('dark')}>
+                <FontAwesome6 size={12} name="moon" color={colors.text} />
+              </TouchableOpacity>
             </View>
           </View>
-          <View>
-            <View style={styles.menuGroup}>
-              <Pressable onPress={() => router.push("/settings/profile")} style={styles.menu}>
-                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-                  <Ionicons name="person" size={20} style={{ color: textColor }} />
-                  <ThemedText>Profile</ThemedText>
-                </View>
-                <FontAwesome6 name="chevron-right" size={10} style={{ color: textColor }} />
-              </Pressable>
-              <Pressable onPress={() => router.push("/settings/meter-device")} style={styles.menu}>
-                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-                  <Ionicons name="speedometer" size={20} style={{ color: textColor }} />
-                  <ThemedText>Meter Devices</ThemedText>
-                </View>
-                <FontAwesome6 name="chevron-right" size={10} style={{ color: textColor }} />
-              </Pressable>
-              <Pressable onPress={() => router.push("/settings/meter-device")} style={styles.menu}>
-                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-                  <FontAwesome6 name="gear" size={20} style={{ color: textColor }} />
-                  <ThemedText>Preferences</ThemedText>
-                </View>
-                <FontAwesome6 name="chevron-right" size={10} style={{ color: textColor }} />
-              </Pressable>
+
+          <TouchableOpacity
+            onPress={() => {
+              /* Handle logout */
+            }}>
+            <View style={styles.menuItem}>
+              <ThemedText style={[styles.menuItemText]}>Logout</ThemedText>
             </View>
-            <View style={styles.menuGroup}>
-              <Pressable onPress={logout} style={styles.menu}>
-                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10 }}>
-                  <Ionicons name="log-out" size={20} style={{ color: textColor }} />
-                  <ThemedText>Logout</ThemedText>
-                </View>
-                <FontAwesome6 name="chevron-right" size={10} style={{ color: textColor }} />
-              </Pressable>
-            </View>
-          </View>
+          </TouchableOpacity>
         </View>
       </ThemedView>
     </SafeAreaView>
@@ -68,26 +79,54 @@ const Settings = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    flex: 1,
+    padding: 20,
   },
-  avatar: {
+  userInfoSection: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  userImage: {
     width: 100,
     height: 100,
-    borderRadius: 100,
+    borderRadius: 50,
+    marginBottom: 10,
   },
-  menuGroup: {
-    padding: 16,
+  userName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  userEmail: {
+    fontSize: 16,
+  },
+  menuWrapper: {
+    marginTop: 20,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 15,
     borderBottomWidth: 1,
-    borderRadius: 8,
-    marginBottom: 16,
+    borderBottomColor: '#ccc',
   },
-  menu: {
-    padding: 8,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  menuItemText: {
+    fontSize: 18,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  themeButton: {
+    flex: 1,
+    padding: 1,
+    borderRadius: 5,
+    alignItems: 'center',
+    backgroundColor: '#e0e0e0',
+  },
+  activeButton: {
+    backgroundColor: '#BB86FC',
   },
 });
 
-export default Settings;
+export default SettingsScreen;

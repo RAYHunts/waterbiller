@@ -1,9 +1,9 @@
-import { router } from "expo-router";
-import { Text, View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
-import useAuthStore from "@/store/authStore";
-import { FontAwesome6 } from "@expo/vector-icons";
+import useAuthStore from '@/store/authStore';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 type SignInPayload = {
   email: string;
@@ -16,8 +16,8 @@ export default function SignIn() {
 
   const { control, handleSubmit } = useForm<SignInPayload>({
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -32,15 +32,38 @@ export default function SignIn() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Controller control={control} name="email" render={({ field: { onChange, value } }) => <TextInput style={styles.input} placeholder="Email" value={value} onChangeText={onChange} />} />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
         <Controller
           control={control}
           name="password"
           render={({ field: { onChange, value } }) => (
             <View style={styles.passwordInputContainer}>
-              <TextInput style={styles.passwordInput} secureTextEntry={!showPassword} placeholder="Password" value={value} onChangeText={onChange} />
+              <TextInput
+                style={styles.passwordInput}
+                secureTextEntry={!showPassword}
+                placeholder="Password"
+                value={value}
+                onChangeText={onChange}
+              />
               <TouchableOpacity style={styles.eyeIcon} onPress={handleHide}>
-                <Text>{showPassword ? <FontAwesome6 name="eye-slash" size={20} /> : <FontAwesome6 name="eye" size={20} />}</Text>
+                <Text>
+                  {showPassword ? (
+                    <FontAwesome6 name="eye-slash" size={20} />
+                  ) : (
+                    <FontAwesome6 name="eye" size={20} />
+                  )}
+                </Text>
               </TouchableOpacity>
             </View>
           )}
@@ -51,7 +74,7 @@ export default function SignIn() {
 
         <View style={styles.signupContainer}>
           <Text>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => router.push("/auth/sign-up")}>
+          <TouchableOpacity onPress={() => router.push('/auth/sign-up')}>
             <Text style={styles.signupButtonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
@@ -62,28 +85,28 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   card: {
-    width: "80%",
-    backgroundColor: "white",
+    width: '80%',
+    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.25)", // Replaced shadow* with boxShadow
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.25)', // Replaced shadow* with boxShadow
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
   },
   passwordInputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "gray",
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
@@ -97,24 +120,24 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: '#007bff',
     padding: 15,
     borderRadius: 5,
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 10,
   },
   buttonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
   },
   signupContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 10,
   },
   signupButtonText: {
-    color: "#007bff",
-    fontWeight: "bold",
+    color: '#007bff',
+    fontWeight: 'bold',
     marginLeft: 5,
   },
 });

@@ -7,9 +7,10 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import useAuthStore from '@/store/authStore';
-import { useColorScheme } from 'react-native';
+import { Appearance, useColorScheme } from 'react-native';
 
 import * as Sentry from '@sentry/react-native';
+import { useThemeStore } from '@/store/themeStore';
 
 Sentry.init({
   dsn: 'https://79c82a2fa150d61678e68cf0cd0092f4@o4508782305607680.ingest.de.sentry.io/4508890551156816',
@@ -22,14 +23,20 @@ Sentry.init({
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
-  const colorScheme = useColorScheme();
+  const { updateSystemTheme, usedTheme } = useThemeStore();
   const [loaded] = useFonts({
     SpaceMono: require('~/assets/fonts/SpaceMono-Regular.ttf'),
   });
   const { refreshSession } = useAuthStore();
+  const refreshTheme = () => {
+    Appearance.addChangeListener(() => {
+      updateSystemTheme();
+    });
+  };
 
   useEffect(() => {
     refreshSession();
+    refreshTheme();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,13 +51,13 @@ const RootLayout = () => {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={usedTheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(main)" options={{ headerShown: false }} />
         <Stack.Screen name="auth" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar style={usedTheme === 'dark' ? 'light' : 'dark'} />
     </ThemeProvider>
   );
 };

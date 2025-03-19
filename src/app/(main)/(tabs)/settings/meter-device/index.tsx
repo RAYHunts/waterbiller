@@ -1,6 +1,6 @@
-import { ThemedText } from "@/components/ThemedText";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ThemedText } from '@/components/ThemedText';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 const Index = () => {
   return (
@@ -9,10 +9,9 @@ const Index = () => {
 
       <Pressable
         onPress={() => {
-          console.log("Pressed");
+          console.log('Pressed');
         }}
-        style={styles.requestButton}
-      >
+        style={styles.requestButton}>
         <ThemedText>Request Meter Device</ThemedText>
       </Pressable>
     </View>
@@ -21,11 +20,11 @@ const Index = () => {
 
 const styles = StyleSheet.create({
   requestButton: {
-    backgroundColor: "blue",
+    backgroundColor: 'blue',
     padding: 10,
     borderRadius: 5,
     margin: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

@@ -1,6 +1,6 @@
-import { ActivityIndicator, AppState, Text, View } from "react-native";
-import { Redirect, Slot, Stack } from "expo-router";
-import useAuthStore from "@/store/authStore";
+import useAuthStore from '@/store/authStore';
+import { Redirect, Slot } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function MainLayout() {
   const { session, isLoading } = useAuthStore();
@@ -8,7 +8,7 @@ export default function MainLayout() {
   // You can keep the splash screen open, or render a loading screen like we do here.
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />
       </View>
     );
